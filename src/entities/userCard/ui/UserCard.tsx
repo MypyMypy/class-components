@@ -1,19 +1,21 @@
-import { UserData } from '@/shared/api/users/users.types';
 import React from 'react';
+import { UserCardProps } from './UserCard.props';
+import { Link } from 'react-router-dom';
+import { useObjectSearchParams } from '@/shared/hooks/useObjectSearchParams';
 
-export class UserCard extends React.Component<UserData> {
-  render(): React.ReactNode {
-    const { firstName, lastName, country, age, email } = this.props;
+export const UserCard: React.FC<UserCardProps> = ({ id, firstName, lastName, country, age, email }) => {
+  const { queryParams } = useObjectSearchParams();
 
-    return (
-      <article>
+  return (
+    <article>
+      <Link to={`/user/${id}` + '?' + queryParams}>
         <h3>
           {firstName} {lastName}
         </h3>
         {age && <p>Age: {age}</p>}
         {country && <p>Country: {country}</p>}
         {email && <p>Email: {email}</p>}
-      </article>
-    );
-  }
-}
+      </Link>
+    </article>
+  );
+};

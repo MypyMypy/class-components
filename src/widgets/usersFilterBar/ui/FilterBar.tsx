@@ -1,23 +1,21 @@
-import React from 'react';
-import { UserData } from '@/shared/api/users/users.types';
+import React, { useState } from 'react';
 import { SearchInput } from '@/features/searchInput';
 import { SearchButton } from '@/features/searchButton';
+import { useGetUsersRequest } from '@/shared/api';
 
-export class FilterBar extends React.Component<{ setUsers: (isLoading: boolean, users: UserData[]) => void }, { searchRow: string }> {
-  state = {
-    searchRow: '',
+export const FilterBar: React.FC = () => {
+  const [searchRow, setSearchRow] = useState<string>('');
+  const { getUsers } = useGetUsersRequest();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    getUsers({ q: searchRow });
   };
 
-  setSearchRow = (value: string) => {
-    this.setState((prevState) => ({ ...prevState, searchRow: value }));
-  };
-
-  render(): React.ReactNode {
-    return (
-      <form>
-        <SearchInput setSearchRow={this.setSearchRow} />
-        <SearchButton searchRow={this.state.searchRow} setUsers={this.props.setUsers} />
-      </form>
-    );
-  }
-}
+  return (
+    <form onSubmit={handleSubmit}>
+      <SearchInput setSearchRow={setSearchRow} />
+      <SearchButton qUser={searchRow} />
+    </form>
+  );
+};

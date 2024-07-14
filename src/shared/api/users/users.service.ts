@@ -1,12 +1,12 @@
 import type { AxiosResponse } from 'axios';
 import { axiosInstance } from '../axios';
-import { UserDataResponce } from './users.types';
+import { GetUsersPayloadI, UserDataResponce } from './users.types';
 
 export default {
-  fetchUsers(): Promise<AxiosResponse> {
-    return axiosInstance.get('/users?limit=20');
+  getUsers(payload: GetUsersPayloadI): Promise<AxiosResponse<UserDataResponce>> {
+    return axiosInstance.get('/users/search', { params: payload });
   },
-  fetchSearchUsers(str: string): Promise<AxiosResponse<UserDataResponce>> {
-    return axiosInstance.get(`/users/search?q=${str}`);
+  getUser(id: number): Promise<AxiosResponse> {
+    return axiosInstance.get(`/users/${id}`);
   },
 };

@@ -1,15 +1,17 @@
 import React from 'react';
 import './App.css';
-import { Home } from '@/pages/home';
+import { ErrorBoundary } from './providers';
+import { AppContextProvider } from './providers/appContext/appContextProvider';
+import { AppRouter } from './providers/router';
 
-class App extends React.Component {
-  render(): React.ReactNode {
-    return (
-      <>
-        <Home />
-      </>
-    );
-  }
-}
+const App: React.FC = () => {
+  return (
+    <ErrorBoundary>
+      <AppContextProvider>
+        <AppRouter />
+      </AppContextProvider>
+    </ErrorBoundary>
+  );
+};
 
 export default App;

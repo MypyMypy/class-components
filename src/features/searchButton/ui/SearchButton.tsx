@@ -1,19 +1,14 @@
-import { UsersService } from '@/shared/api';
-import { UserData } from '@/shared/api/users/users.types';
 import React from 'react';
+import { SearchButtonProps } from './SearchButton.props';
+import { useGetUsersRequest } from '@/shared/api';
 
-export class SearchButton extends React.Component<{ searchRow: string; setUsers: (isLoading: boolean, users: UserData[]) => void }> {
-  handlerClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+export const SearchButton: React.FC<SearchButtonProps> = ({ qUser }) => {
+  const { getUsers } = useGetUsersRequest();
+
+  const handlerClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    this.props.setUsers(true, []);
-    localStorage.setItem('qUser', this.props.searchRow);
-    UsersService.default
-      .fetchSearchUsers(this.props.searchRow)
-      .then((res) => res.data)
-      .then((data) => this.props.setUsers(false, data.users));
+    getUsers({ q: qUser });
   };
 
-  render(): React.ReactNode {
-    return <button onClick={(e) => this.handlerClick(e)}>Search</button>;
-  }
-}
+  return <button onClick={(e) => handlerClick(e)}>Search</button>;
+};
