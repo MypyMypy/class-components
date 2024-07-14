@@ -6,6 +6,9 @@ export const usersReducer = (state: UsersReducerI, action: UsersActionsT): Users
       return {
         ...state,
         users: action.payload.users,
+        limit: action.payload.limit || state.limit,
+        skip: action.payload.skip || state.skip,
+        total: action.payload.total || state.total,
       };
     case UsersActions.changeLoadStatus:
       return {

@@ -1,12 +1,11 @@
-import { UserData } from '@/shared/api/users/users.types';
+import { UserReducerI } from '@/shared/reducers/user/userReducer.types';
 import { UsersActionsT } from '@/shared/reducers/users';
+import { UsersReducerI } from '@/shared/reducers/users/usersReducer.types';
 import { Dispatch } from 'react';
 
 export interface AppContextI {
-  users: {
-    users: UserData[];
-    status: 'fullfield' | 'loading' | 'rejected';
-  };
+  users: UsersReducerI;
+  user: UserReducerI;
 }
 
 export type AppDispatchT = Dispatch<UsersActionsT>;

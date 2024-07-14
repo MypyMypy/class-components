@@ -1,11 +1,9 @@
 import React from 'react';
 import { UsersList } from '@/widgets/usersList';
 import { FilterBar } from '@/widgets/usersFilterBar';
-import { useAppContext } from '@/app/providers/appContext/appContext';
+import { UsersPagination } from '@/widgets/usersPagination';
 
 export const Home: React.FC = () => {
-  const { state } = useAppContext();
-
   return (
     <>
       <header>
@@ -17,7 +15,7 @@ export const Home: React.FC = () => {
         <section>
           <div className='container'>
             <h1>Users</h1>
-            {state.users.status === 'loading' ? 'Loading...' : <UsersList usersData={state.users.users} />}
+            <UsersList Pagination={UsersPagination} />
           </div>
         </section>
       </main>

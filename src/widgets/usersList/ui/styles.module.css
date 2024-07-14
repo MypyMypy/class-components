@@ -1,0 +1,13 @@
+.users-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+    list-style: none;
+
+    li {
+        flex: 1 1 25%;
+        padding: 10px 20px;
+        background-color: #ededed;
+    }
+}

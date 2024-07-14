@@ -1,3 +1,3 @@
 export interface SearchButtonProps {
-  handleSubmit: () => void;
+  qUser: string;
 }

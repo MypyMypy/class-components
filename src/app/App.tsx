@@ -1,14 +1,14 @@
 import React from 'react';
 import './App.css';
-import { Home } from '@/pages/home';
 import { ErrorBoundary } from './providers';
 import { AppContextProvider } from './providers/appContext/appContextProvider';
+import { AppRouter } from './providers/router';
 
 const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <AppContextProvider>
-        <Home />
+        <AppRouter />
       </AppContextProvider>
     </ErrorBoundary>
   );
