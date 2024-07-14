@@ -1,37 +1,50 @@
-import React from 'react';
-import { UserData } from '@/shared/api/users/users.types';
+import React, { useEffect, useState } from 'react';
 import { SearchInput } from '@/features/searchInput';
 import { SearchButton } from '@/features/searchButton';
+import { useLSQUser } from '../hooks/useLSQUser';
+import { useAppContext } from '@/app/providers/appContext/appContext';
+import { UsersActions } from '@/shared/reducers/users/usersReducer.types';
+import { UsersService } from '@/shared/api';
 
-export class FilterBar extends React.Component<
-  { setUsers: (isLoading: boolean, users: UserData[]) => void },
-  { searchRow: string; isError: boolean }
-> {
-  state = {
-    searchRow: '',
-    isError: false,
-  };
+export const FilterBar: React.FC = () => {
+  const { dispatch } = useAppContext();
 
-  setSearchRow = (value: string) => {
-    this.setState((prevState) => ({ ...prevState, searchRow: value }));
-  };
-
-  handlerButton = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.setState((prevState) => ({ ...prevState, isError: true }));
+    handleMakeRequest();
   };
 
-  render(): React.ReactNode {
-    if (this.state.isError) {
-      throw new Error('Yo Ho Ho!');
-    }
+  const { setQUser } = useLSQUser();
 
-    return (
-      <form>
-        <button onClick={this.handlerButton}>Throw Error</button>
-        <SearchInput setSearchRow={this.setSearchRow} />
-        <SearchButton searchRow={this.state.searchRow} setUsers={this.props.setUsers} />
-      </form>
-    );
-  }
-}
+  const [searchRow, setSearchRow] = useState<string>('');
+
+  const handleMakeRequest = () => {
+    dispatch({
+      type: UsersActions.changeLoadStatus,
+      payload: { status: 'loading' },
+    });
+    setQUser(searchRow);
+    UsersService.default
+      .fetchUsers(searchRow)
+      .then((res) => res.data)
+      .then((data) => {
+        dispatch({
+          type: UsersActions.load,
+          payload: { users: data.users },
+        });
+        dispatch({
+          type: UsersActions.changeLoadStatus,
+          payload: { status: 'fullfield' },
+        });
+      });
+  };
+
+  useEffect(() => handleMakeRequest(), []);
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <SearchInput setSearchRow={setSearchRow} />
+      <SearchButton handleSubmit={handleMakeRequest} />
+    </form>
+  );
+};
